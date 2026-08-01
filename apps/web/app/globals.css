@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+
+@theme {
+    --font-sans:
+        ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono:
+        ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+
+    --color-ink: #16161a;
+    --color-ink-muted: #62626b;
+    --color-paper: #fdfdfc;
+    --color-rule: #e6e6e3;
+}
+
+@media (prefers-color-scheme: dark) {
+    @theme {
+        --color-ink: #ededf0;
+        --color-ink-muted: #9a9aa3;
+        --color-paper: #111113;
+        --color-rule: #26262a;
+    }
+}
+
+html {
+    color-scheme: light dark;
+}
+
+body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Prose lives here rather than in a component map so that MDX posts and
+ * hand-written TSX pages render identically. `.prose` is applied by the
+ * article wrapper; MDX emits plain HTML elements into it.
+ */
+.prose {
+    line-height: 1.7;
+}
+
+.prose > * + * {
+    margin-top: 1.25em;
+}
+
+.prose h2 {
+    margin-top: 2.5em;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.prose h3 {
+    margin-top: 2em;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.prose a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--color-rule);
+}
+
+.prose a:hover {
+    text-decoration-color: currentColor;
+}
+
+.prose ul,
+.prose ol {
+    padding-left: 1.5em;
+}
+
+.prose ul {
+    list-style: disc;
+}
+
+.prose ol {
+    list-style: decimal;
+}
+
+.prose li + li {
+    margin-top: 0.4em;
+}
+
+.prose blockquote {
+    border-left: 2px solid var(--color-rule);
+    padding-left: 1em;
+    color: var(--color-ink-muted);
+}
+
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.925rem;
+}
+
+.prose th,
+.prose td {
+    border-bottom: 1px solid var(--color-rule);
+    padding: 0.5em 0.75em;
+    text-align: left;
+}
+
+.prose th {
+    font-weight: 600;
+}
+
+/* Inline code only. Fenced blocks are handled by the shiki rules below. */
+.prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background-color: color-mix(in srgb, var(--color-rule) 60%, transparent);
+    padding: 0.15em 0.35em;
+    border-radius: 0.25rem;
+}
+
+/*
+ * rehype-pretty-code emits both themes at build time as CSS variables on every
+ * token, so switching is a media query and costs no client JS and no flash.
+ * Background belongs on the block; colour belongs on the tokens.
+ */
+[data-rehype-pretty-code-figure] pre {
+    background-color: var(--shiki-light-bg);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-rule);
+    overflow-x: auto;
+}
+
+[data-rehype-pretty-code-figure] code span {
+    color: var(--shiki-light);
+}
+
+@media (prefers-color-scheme: dark) {
+    [data-rehype-pretty-code-figure] pre {
+        background-color: var(--shiki-dark-bg);
+    }
+
+    [data-rehype-pretty-code-figure] code span {
+        color: var(--shiki-dark);
+    }
+}

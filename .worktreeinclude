@@ -1,0 +1,8 @@
+# Untracked local files copied into each `claude --worktree` checkout.
+# .gitignore syntax; ONLY files that are also gitignored get copied, so nothing
+# tracked is duplicated.
+.env
+.env.local
+.env.*.local
+apps/web/.env.local
+.vercel

@@ -1,0 +1,26 @@
+packages:
+    - 'apps/*'
+    - 'packages/*'
+    - 'tooling/*'
+# pnpm 11 replaces pnpm 10's `onlyBuiltDependencies`. Both of these are native
+# and genuinely need their install scripts: sharp backs `next/image`
+# optimisation, unrs-resolver backs the eslint import resolver.
+allowBuilds:
+    sharp: true
+    unrs-resolver: true
+minimumReleaseAgeExclude:
+    - '@shikijs/core@4.4.1'
+    - '@shikijs/engine-javascript@4.4.1'
+    - '@shikijs/engine-oniguruma@4.4.1'
+    - '@shikijs/langs@4.4.1'
+    - '@shikijs/primitive@4.4.1'
+    - '@shikijs/themes@4.4.1'
+    - '@shikijs/types@4.4.1'
+    - '@turbo/darwin-64@2.10.8'
+    - '@turbo/darwin-arm64@2.10.8'
+    - '@turbo/linux-64@2.10.8'
+    - '@turbo/linux-arm64@2.10.8'
+    - '@turbo/windows-64@2.10.8'
+    - '@turbo/windows-arm64@2.10.8'
+    - shiki@4.4.1
+    - turbo@2.10.8

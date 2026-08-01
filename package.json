@@ -1,0 +1,22 @@
+{
+    "name": "thomasar-dev",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "turbo dev --filter=@thomasar/web --output-logs=new-only --log-prefix=none",
+        "build": "turbo build",
+        "lint": "turbo lint",
+        "test": "turbo test",
+        "check": "node scripts/check.mjs",
+        "check:verbose": "node scripts/check.mjs --verbose",
+        "test:coverage": "turbo test:coverage",
+        "typecheck": "turbo typecheck",
+        "env:pull": "vercel env pull apps/web/.env.local"
+    },
+    "devDependencies": {
+        "prettier": "^3.9.6",
+        "turbo": "^2.10.8"
+    },
+    "license": "MIT",
+    "packageManager": "pnpm@11.18.0"
+}

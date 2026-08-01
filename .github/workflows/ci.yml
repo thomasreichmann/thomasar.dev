@@ -1,0 +1,40 @@
+name: CI
+
+on:
+    pull_request:
+
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    ci:
+        # Required status check in branch protection. The name is deliberately
+        # generic and task-independent: this job's step list evolves, and
+        # coupling the required-check name to that list turns every step
+        # addition into a branch-protection migration. Keep this name stable;
+        # change steps freely.
+        name: Checks
+        runs-on: ubuntu-latest
+        env:
+            TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+            TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node and pnpm
+              uses: ./.github/actions/setup-node-pnpm
+
+            # Pre-merge gate. Same tasks as `pnpm check` (lint + build + test)
+            # plus typecheck. `build` is not redundant here: post metadata is
+            # only validated when lib/posts.ts parses it during static
+            # generation, so a post with a bad date or a canonical pointing at
+            # the wrong slug is invisible to lint and typecheck and fails the
+            # build. --continue so one failing task doesn't hide the others.
+            #
+            # No env block. The site reads nothing at module scope and talks to
+            # nothing, which is also what keeps fork PRs green without secrets.
+            - name: Lint, typecheck, build, test
+              run: pnpm exec turbo lint typecheck build test --continue

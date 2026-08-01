@@ -1,0 +1,28 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "globalPassThroughEnv": ["*"],
+    "tasks": {
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": [".next/**", "dist/**"],
+            "env": ["NEXT_PUBLIC_*"]
+        },
+        "dev": {
+            "dependsOn": ["^build"],
+            "cache": false,
+            "persistent": true
+        },
+        "lint": {},
+        "test": {},
+        "test:coverage": {
+            "outputs": ["coverage/**"]
+        },
+        "typecheck": {
+            // Also depends on `build`, not just upstream typechecks. tsconfig
+            // includes `.next/types/**/*.ts`, which `next build` generates, so
+            // running the two concurrently lets tsc read that directory
+            // mid-write and fail intermittently.
+            "dependsOn": ["^typecheck", "build"]
+        }
+    }
+}

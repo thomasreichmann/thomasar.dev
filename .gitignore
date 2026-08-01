@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Turbo
+.turbo/
+
+# Next.js
+.next/
+out/
+
+# Build
+dist/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Testing - coverage output at workspace roots only
+/coverage/
+apps/*/coverage/
+packages/*/coverage/
+
+# Vercel
+.vercel
+
+# Local-only working docs & scripts (see .local/README.md)
+.local/
+CLAUDE.local.md
+
+# Claude Code worktrees (default location for `claude --worktree`)
+.claude/worktrees/

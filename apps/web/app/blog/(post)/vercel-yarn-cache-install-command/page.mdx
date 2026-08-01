@@ -1,0 +1,51 @@
+export const metadata = {
+    title: 'Vercel drops your Yarn cache if you set an Install Command',
+    date: '2026-08-01',
+    description:
+        'Setting an Install Command silently disables dependency caching for Yarn 3 and 4 projects. The fix exists upstream, it just sits on the wrong side of an if.',
+    alternates: { canonical: '/blog/vercel-yarn-cache-install-command' },
+    tags: ['vercel', 'yarn', 'build-performance'],
+    draft: true,
+};
+
+<PostHeader {...metadata} />
+
+Draft. The measurements, the root cause, and the upstream patch are written up
+in the SKIP-5949 experiment notes; this file is where the post gets assembled.
+
+## What the evidence has to be
+
+Timings alone ask the reader to trust someone else's machine. The load-bearing
+fact is an integer, printed from the restored build cache before install ran:
+
+```bash
+# Install Command set
+$ ls .yarn/cache | wc -l
+du: cannot access '.yarn/cache': No such file or directory
+
+# zero-config path
+$ ls .yarn/cache | wc -l
+3552
+```
+
+| yarn step  | Install Command set | zero-config path |
+| ---------- | ------------------: | ---------------: |
+| Resolution |               0.72s |            0.72s |
+| Fetch      |              29.46s |            5.18s |
+| Link       |              15.27s |           15.05s |
+| **total**  |          **46.12s** |       **21.58s** |
+
+## The branch
+
+```ts
+// packages/next/src/index.ts
+if (typeof trimmedInstallCommand === 'string') {
+    await execCommand(installCommand, { cwd: entryPath, env: spawnEnv });
+} else {
+    await runNpmInstall(entryPath, [], { env: spawnEnv }, meta, nodeVersion);
+}
+```
+
+`runNpmInstall` is where `yarn config set enableGlobalCache false` lives, so the
+custom path never runs it, Yarn 4 keeps its packages in `~/.yarn/berry/cache`,
+and `prepareCache` uploads an entry for a directory nothing wrote.
