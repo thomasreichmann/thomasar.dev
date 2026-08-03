@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { site } from '@/lib/site';
@@ -59,6 +60,7 @@ export default function RootLayout({
                         RSS
                     </a>
                 </footer>
+                <Analytics />
             </body>
         </html>
     );
