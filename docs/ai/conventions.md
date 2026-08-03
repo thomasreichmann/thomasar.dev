@@ -76,7 +76,14 @@ canonical or an unsorted post is not the kind of bug that announces itself.
 
 ## Toolchain ceilings
 
-TypeScript is pinned below 6.1 and ESLint below 10, both because of
-`eslint-config-next`: `typescript-eslint` refuses to load against TS 7, and
-`eslint-plugin-react` has no ESLint 10 support. Neither is our choice to make
-until those ship. Everything else tracks latest.
+TypeScript is pinned below 6.1 because `typescript-eslint` (via
+`eslint-config-next`) refuses to load against TS 7. Not our choice to make
+until that ships. Everything else tracks latest.
+
+ESLint runs at 10 even though `eslint-plugin-react`'s peer range stops at
+`^9.7`. Its only ESLint-10 crash path is React version detection, which
+`eslint.config.mjs` bypasses by pinning `settings.react.version` (comment there
+has the removal criteria). The install-time peer warnings from
+`eslint-plugin-react`, `eslint-plugin-import`, and `eslint-plugin-jsx-a11y`
+are expected until those release ESLint-10 support; the enabled rules from all
+three are verified working at runtime.
