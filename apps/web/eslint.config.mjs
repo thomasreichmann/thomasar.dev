@@ -124,6 +124,13 @@ const localPlugin = {
 const eslintConfig = defineConfig([
     ...nextVitals,
     ...nextTs,
+    // eslint-config-next sets settings.react.version to 'detect', whose
+    // detection path calls context.getFilename(), removed in ESLint 10
+    // (eslint-plugin-react <= 7.37.5 crashes on load). A literal version skips
+    // that path entirely; resolved rule set is identical. Bump on React majors.
+    // Remove once eslint-plugin-react ships a release with eslint ^10 in its
+    // peer range (tracking: jsx-eslint/eslint-plugin-react#4022).
+    { settings: { react: { version: '19.2' } } },
     globalIgnores([
         // Default ignores of eslint-config-next:
         '.next/**',
