@@ -7,6 +7,11 @@ node_modules/
 # Next.js
 .next/
 out/
+# Generated, and regenerated before anything reads it: `typecheck` dependsOn
+# `build` in turbo.json, and `next build` rewrites this file. Committed it
+# would only churn, since `next dev` and `next build` write different import
+# paths (.next/dev/types vs .next/types) into it.
+next-env.d.ts
 
 # Build
 dist/
